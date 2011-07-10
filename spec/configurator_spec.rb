@@ -37,21 +37,17 @@ describe Configulations do
         @config = Configulations.new
       end
 
-      it "has test data setup" do
-        obj = JSON.load(File.read @config.include_pattern)
-        obj["alignment"].should == "good"
-        File.exists?("./config/parent/child.json").should be_true
-      end
-
       context "when child introduces new config option" do
         it "is appended and namespaced to parent" do
+          # config/parent/child.json specifies xyz = foobarbaz
           @config.parent.child.xyz.should == "foobarbaz"
         end
       end
 
       context "when child and parent share option" do
         it "overwrites parent config option" do
-          raise @config.inspect
+          # config/parent.json specifies alignment = good
+          # config/parent/child.json specifies alignment = evil
           @config.parent.alignment.should == "evil"
         end
       end
